@@ -24,6 +24,7 @@ const paymentRouter = require("./routes/paymentRoutes");
 
 const cors = require("cors");
 const app = express();
+app.enable("trust proxy");
 const AppError = require("./utils/appError");
 app.use(cors());
 // setting secure header
