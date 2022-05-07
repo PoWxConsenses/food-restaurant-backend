@@ -2,14 +2,15 @@ const express = require("express");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsDoc = require('swagger-jsdoc');
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./swagger.yaml');
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./swagger.yaml");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const path = require("path");
 const rfs = require("rotating-file-stream");
+const compression = require("compression");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -26,6 +27,7 @@ const app = express();
 const AppError = require("./utils/appError");
 app.use(cors());
 // setting secure header
+app.use(compression());
 app.use(helmet());
 //it allow max request per windowMs request to server from an ip
 const limiter = rateLimit({
@@ -71,11 +73,7 @@ app.use("/fd/cart/", cartRouter);
 app.use("/fd/order/", orderRouter);
 app.use("/fd/payment/", paymentRouter);
 //::PaymentReceipt
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument)
-);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this Server`, 404));
 });

@@ -55,7 +55,6 @@ exports.createPayment = async (req, res) => {
   const payment_capture = 1;
   const amount = req.body.amount;
   const currency = "INR";
-  console.log(req);
   const options = {
     amount: amount * 100,
     currency,
@@ -65,7 +64,6 @@ exports.createPayment = async (req, res) => {
 
   try {
     const response = await razorPayInstance.orders.create(options);
-    console.log(response);
     res.json({
       id: response.id,
       currency: response.currency,
