@@ -26,7 +26,10 @@ const cors = require("cors");
 const app = express();
 app.enable("trust proxy");
 const AppError = require("./utils/appError");
+// cors implement
 app.use(cors());
+app.options("*", cors());
+
 // setting secure header
 app.use(compression());
 app.use(helmet());
